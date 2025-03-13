@@ -1,7 +1,7 @@
 // @ts-nocheck
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import SearchFilter from '../components/SearchFilter'
 import PropertyCard from '../components/PropertyCard'
@@ -26,6 +26,27 @@ function ErrorFallback({ error, resetErrorBoundary }) {
   )
 }
 
+function LoadingFallback() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div
+          key={i}
+          className="bg-white rounded-lg shadow-md h-96 animate-pulse"
+        >
+          <div className="h-48 bg-gray-200 rounded-t-lg" />
+          <div className="p-4 space-y-4">
+            <div className="h-4 bg-gray-200 rounded w-3/4" />
+            <div className="h-4 bg-gray-200 rounded w-1/2" />
+            <div className="h-4 bg-gray-200 rounded w-2/3" />
+            <div className="h-8 bg-gray-200 rounded w-1/3" />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function PropertiesContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -36,6 +57,8 @@ function PropertiesContent() {
 
   // Get initial filters from URL parameters
   useEffect(() => {
+    if (!searchParams) return
+
     const initialFilters: PropertyFilter = {
       type: searchParams.get('type') as 'sale' | 'rent' || undefined,
       minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
@@ -114,21 +137,7 @@ function PropertiesContent() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {loading ? (
-              // Loading skeleton
-              Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-white rounded-lg shadow-md h-96 animate-pulse"
-                >
-                  <div className="h-48 bg-gray-200 rounded-t-lg" />
-                  <div className="p-4 space-y-4">
-                    <div className="h-4 bg-gray-200 rounded w-3/4" />
-                    <div className="h-4 bg-gray-200 rounded w-1/2" />
-                    <div className="h-4 bg-gray-200 rounded w-2/3" />
-                    <div className="h-8 bg-gray-200 rounded w-1/3" />
-                  </div>
-                </div>
-              ))
+              <LoadingFallback />
             ) : properties.length > 0 ? (
               properties.map(property => (
                 <PropertyCard key={property.id} property={property} />
@@ -155,7 +164,9 @@ function PropertiesContent() {
 export default function Properties() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <PropertiesContent />
+      <Suspense fallback={<LoadingFallback />}>
+        <PropertiesContent />
+      </Suspense>
     </ErrorBoundary>
   )
 }
