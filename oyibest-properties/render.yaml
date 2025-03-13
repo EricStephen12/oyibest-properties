@@ -3,9 +3,11 @@ services:
     name: oyibest-properties
     env: node
     rootDir: oyibest-properties
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --legacy-peer-deps && npm run build
     startCommand: npm start
     envVars:
+      - key: NODE_VERSION
+        value: 18.x
       - key: NODE_ENV
         value: production
       - key: NEXT_PUBLIC_FIREBASE_API_KEY
