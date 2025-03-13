@@ -11,11 +11,24 @@ import { FaSearch, FaHome, FaHandshake } from "react-icons/fa";
 import { Property, PropertyFilter } from '@/types/property'
 import { getFeaturedProperties } from '@/lib/firebase/properties'
 import { motion } from 'framer-motion'
+import { ErrorBoundary } from 'react-error-boundary'
 
-// Add export const dynamic = 'force-dynamic' to prevent static generation
-export const dynamic = 'force-dynamic'
+function ErrorFallback({ error, resetErrorBoundary }) {
+  return (
+    <div className="text-center py-12">
+      <h2 className="text-xl font-medium text-gray-900 mb-4">Something went wrong:</h2>
+      <pre className="text-red-600 mb-4">{error.message}</pre>
+      <button
+        onClick={resetErrorBoundary}
+        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+      >
+        Try again
+      </button>
+    </div>
+  )
+}
 
-export default function Home() {
+function HomeContent() {
   const router = useRouter()
   const [featuredProperties, setFeaturedProperties] = useState<Property[]>([])
   const [loading, setLoading] = useState(true)
@@ -192,4 +205,12 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+export default function Home() {
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <HomeContent />
+    </ErrorBoundary>
+  )
 }
