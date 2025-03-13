@@ -1,7 +1,7 @@
 // @ts-nocheck
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import SearchFilter from '../components/SearchFilter'
 import PropertyCard from '../components/PropertyCard'
@@ -10,7 +10,7 @@ import { getProperties } from '@/lib/firebase/properties'
 import { motion, AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
 
-function PropertiesContent() {
+export default function Properties() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [properties, setProperties] = useState<Property[]>([])
@@ -133,35 +133,5 @@ function PropertiesContent() {
         </AnimatePresence>
       </div>
     </div>
-  )
-}
-
-export default function Properties() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/4 mb-4" />
-            <div className="h-12 bg-gray-200 rounded mb-8" />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="bg-white rounded-lg shadow-md h-96">
-                  <div className="h-48 bg-gray-200 rounded-t-lg" />
-                  <div className="p-4 space-y-4">
-                    <div className="h-4 bg-gray-200 rounded w-3/4" />
-                    <div className="h-4 bg-gray-200 rounded w-1/2" />
-                    <div className="h-4 bg-gray-200 rounded w-2/3" />
-                    <div className="h-8 bg-gray-200 rounded w-1/3" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    }>
-      <PropertiesContent />
-    </Suspense>
   )
 }
