@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="96" cy="96" r="96" fill="#2563EB"/>
+  
+  <!-- Letter O -->
+  <path d="M96 36C66.1765 36 42 60.1765 42 90C42 119.824 66.1765 144 96 144C125.824 144 150 119.824 150 90C150 60.1765 125.824 36 96 36ZM96 120C79.4315 120 66 106.569 66 90C66 73.4315 79.4315 60 96 60C112.569 60 126 73.4315 126 90C126 106.569 112.569 120 96 120Z" fill="white"/>
+  
+  <!-- Roof accent -->
+  <path d="M96 18L144 48H48L96 18Z" fill="white"/>
+</svg> 
