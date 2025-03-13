@@ -10,6 +10,9 @@ import { getProperties } from '@/lib/firebase/properties'
 import { motion, AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
 
+// Add export const dynamic = 'force-dynamic' to prevent static generation
+export const dynamic = 'force-dynamic'
+
 export default function Properties() {
   const router = useRouter()
   const searchParams = useSearchParams()

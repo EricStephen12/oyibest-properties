@@ -12,6 +12,9 @@ import { Property, PropertyFilter } from '@/types/property'
 import { getFeaturedProperties } from '@/lib/firebase/properties'
 import { motion } from 'framer-motion'
 
+// Add export const dynamic = 'force-dynamic' to prevent static generation
+export const dynamic = 'force-dynamic'
+
 export default function Home() {
   const router = useRouter()
   const [featuredProperties, setFeaturedProperties] = useState<Property[]>([])
