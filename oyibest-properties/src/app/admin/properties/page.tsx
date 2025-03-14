@@ -120,8 +120,13 @@ export default function AdminProperties() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
-                      {formatPrice(property.price)}
+                    <div className="mt-2 flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-900">
+                        {formatPrice(property.price)}
+                      </span>
+                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                        {property.type}
+                      </span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -155,8 +160,8 @@ export default function AdminProperties() {
       {/* Card view for mobile screens */}
       <div className="md:hidden space-y-4">
         {properties.map((property: any) => (
-          <div key={property.id} className="bg-white rounded-lg shadow-md p-4">
-            <div className="flex items-start space-x-4">
+          <div key={property.id} className="bg-white rounded-lg shadow-md p-4 overflow-hidden">
+            <div className="flex gap-4">
               <div className="relative h-20 w-20 flex-shrink-0">
                 <Image
                   src={property.images[0]}
@@ -166,37 +171,37 @@ export default function AdminProperties() {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 pr-4">
-                    <h3 className="text-sm font-medium text-gray-900 truncate">
+                <div className="flex flex-col">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="text-sm font-medium text-gray-900 truncate max-w-[200px]">
                       {property.title}
                     </h3>
-                    <p className="mt-1 text-sm text-gray-500 break-words line-clamp-2">
-                      {property.location}
-                    </p>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <Link
+                        href={`/admin/properties/${property.id}/edit`}
+                        className="text-blue-600 hover:text-blue-900 p-1.5"
+                      >
+                        <FaEdit className="w-4 h-4" />
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(property.id)}
+                        className="text-red-600 hover:text-red-900 p-1.5"
+                      >
+                        <FaTrash className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2 flex-shrink-0">
-                    <Link
-                      href={`/admin/properties/${property.id}/edit`}
-                      className="text-blue-600 hover:text-blue-900 p-2"
-                    >
-                      <FaEdit className="w-4 h-4" />
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(property.id)}
-                      className="text-red-600 hover:text-red-900 p-2"
-                    >
-                      <FaTrash className="w-4 h-4" />
-                    </button>
+                  <p className="text-sm text-gray-500 break-words line-clamp-2 mt-1">
+                    {property.location}
+                  </p>
+                  <div className="mt-2 flex items-center justify-between">
+                    <span className="text-sm font-medium text-gray-900">
+                      {formatPrice(property.price)}
+                    </span>
+                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                      {property.type}
+                    </span>
                   </div>
-                </div>
-                <div className="mt-2 flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-900">
-                    {formatPrice(property.price)}
-                  </span>
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 capitalize">
-                    {property.type}
-                  </span>
                 </div>
               </div>
             </div>
