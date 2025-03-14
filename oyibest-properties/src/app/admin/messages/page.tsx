@@ -101,13 +101,13 @@ export default function Messages() {
                 className="p-4 sm:p-6"
               >
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 overflow-hidden">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
                       <h3 className="text-lg font-medium text-gray-900 truncate">
                         {message.name}
                       </h3>
                       <div className="flex flex-wrap gap-2 text-sm text-gray-500">
-                        <a href={`mailto:${message.email}`} className="hover:text-blue-600">
+                        <a href={`mailto:${message.email}`} className="hover:text-blue-600 break-all">
                           {message.email}
                         </a>
                         <span>•</span>
@@ -118,9 +118,9 @@ export default function Messages() {
                     </div>
                     
                     <div className="relative">
-                      <p className={`text-gray-600 whitespace-pre-wrap ${
+                      <p className={`text-gray-600 break-words ${
                         !isMessageExpanded(message.id) ? 'line-clamp-3' : ''
-                      }`}>
+                      }`} style={{ wordBreak: 'break-word', overflowWrap: 'break-word', maxWidth: '100%' }}>
                         {message.message}
                       </p>
                       {message.message.length > 150 && (
@@ -138,7 +138,7 @@ export default function Messages() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4 mt-2 sm:mt-0">
+                  <div className="flex items-center gap-4 mt-2 sm:mt-0 shrink-0">
                     <span className="text-sm text-gray-500 whitespace-nowrap">
                       {message.createdAt.toLocaleDateString()} {message.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
