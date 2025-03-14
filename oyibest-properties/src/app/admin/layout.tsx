@@ -62,21 +62,7 @@ export default function AdminLayout({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Mobile Header */}
-      <div className="lg:hidden bg-white shadow-sm py-4 px-4 flex items-center justify-between sticky top-0 z-50">
-        <div className="flex items-center">
-          <h2 className="text-xl font-bold text-blue-600">Onyibest</h2>
-          <span className="text-gray-600 ml-1">Admin</span>
-        </div>
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-        >
-          <FaChevronRight className={`h-5 w-5 transform transition-transform ${isMobileMenuOpen ? 'rotate-180' : ''}`} />
-        </button>
-      </div>
-
-      <div className="flex">
+      <div className="flex h-screen overflow-hidden">
         {/* Sidebar */}
         <motion.aside
           initial={false}
@@ -84,10 +70,18 @@ export default function AdminLayout({
             width: isSidebarOpen ? 256 : 80,
             transition: { duration: 0.3 }
           }}
-          className={`fixed lg:relative top-0 left-0 z-40 h-screen bg-white shadow-lg lg:shadow-md transform lg:transform-none transition-all duration-300 ease-in-out ${
+          className={`fixed lg:relative top-0 left-0 z-40 h-full bg-white shadow-lg lg:shadow-md transform lg:transform-none transition-all duration-300 ease-in-out ${
             isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
           }`}
         >
+          {/* Mobile Toggle Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="lg:hidden absolute right-4 top-4 p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200"
+          >
+            <FaChevronLeft className="h-5 w-5" />
+          </button>
+
           <div className={`p-6 flex items-center ${!isSidebarOpen && 'justify-center'}`}>
             <Link href="/admin/dashboard" className="flex items-center">
               {isSidebarOpen ? (
@@ -127,7 +121,7 @@ export default function AdminLayout({
             </button>
           </nav>
 
-          {/* Toggle Button */}
+          {/* Desktop Toggle Button */}
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="hidden lg:flex absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 rounded-full bg-white shadow-md items-center justify-center text-gray-600 hover:text-gray-900"
@@ -135,6 +129,14 @@ export default function AdminLayout({
             <FaChevronLeft className={`h-4 w-4 transform transition-transform ${!isSidebarOpen ? 'rotate-180' : ''}`} />
           </button>
         </motion.aside>
+
+        {/* Mobile Menu Button - Fixed at the top left corner */}
+        <button
+          onClick={() => setIsMobileMenuOpen(true)}
+          className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-full bg-white shadow-md text-gray-600 hover:bg-gray-50"
+        >
+          <FaChevronRight className="h-5 w-5" />
+        </button>
 
         {/* Overlay */}
         {isMobileMenuOpen && (
@@ -145,13 +147,9 @@ export default function AdminLayout({
         )}
 
         {/* Main Content */}
-        <main className={`flex-1 min-h-screen transition-all duration-300 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
+        <main className={`flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
           <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div className="p-4 sm:p-6 lg:p-8">
-                {children}
-              </div>
-            </div>
+            {children}
           </div>
         </main>
       </div>

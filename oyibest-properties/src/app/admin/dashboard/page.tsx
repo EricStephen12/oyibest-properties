@@ -100,23 +100,25 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Welcome Back!</h1>
-          <p className="text-gray-600 mt-1">Here's what's happening with your properties today.</p>
-        </div>
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <Link
-            href="/admin/properties/new"
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto justify-center"
+      <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Welcome Back!</h1>
+            <p className="text-gray-600 mt-1">Here's what's happening with your properties today.</p>
+          </div>
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <FaPlus className="mr-2" />
-            Add Property
-          </Link>
-        </motion.div>
+            <Link
+              href="/admin/properties/new"
+              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto justify-center"
+            >
+              <FaPlus className="mr-2" />
+              Add Property
+            </Link>
+          </motion.div>
+        </div>
       </div>
 
       {/* Stats Cards */}
@@ -125,7 +127,7 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+          className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
         >
           <div className="flex items-center">
             <div className="p-3 bg-blue-100 rounded-lg">
@@ -142,7 +144,7 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+          className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
         >
           <div className="flex items-center">
             <div className="p-3 bg-green-100 rounded-lg">
@@ -163,9 +165,9 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white rounded-xl shadow-sm overflow-hidden"
+          className="bg-white rounded-lg shadow-sm"
         >
-          <div className="p-6 border-b border-gray-100">
+          <div className="px-6 py-4 border-b border-gray-100">
             <h2 className="text-lg font-semibold text-gray-900">Recent Properties</h2>
           </div>
           <div className="divide-y divide-gray-100">
@@ -200,14 +202,14 @@ export default function AdminDashboard() {
                 </div>
               </Link>
             ))}
-          </div>
-          <div className="p-4 bg-gray-50">
-            <Link
-              href="/admin/properties"
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-            >
-              View All Properties →
-            </Link>
+            <div className="p-4 bg-gray-50">
+              <Link
+                href="/admin/properties"
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              >
+                View All Properties →
+              </Link>
+            </div>
           </div>
         </motion.div>
 
@@ -216,9 +218,9 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-white rounded-xl shadow-sm overflow-hidden"
+          className="bg-white rounded-lg shadow-sm"
         >
-          <div className="p-6 border-b border-gray-100">
+          <div className="px-6 py-4 border-b border-gray-100">
             <h2 className="text-lg font-semibold text-gray-900">Recent Messages</h2>
           </div>
           <div className="divide-y divide-gray-100">
@@ -238,14 +240,14 @@ export default function AdminDashboard() {
                 </div>
               </div>
             ))}
-          </div>
-          <div className="p-4 bg-gray-50">
-            <Link
-              href="/admin/messages"
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-            >
-              View All Messages →
-            </Link>
+            <div className="p-4 bg-gray-50">
+              <Link
+                href="/admin/messages"
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              >
+                View All Messages →
+              </Link>
+            </div>
           </div>
         </motion.div>
       </div>
