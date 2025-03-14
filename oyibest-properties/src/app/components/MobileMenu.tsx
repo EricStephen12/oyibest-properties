@@ -27,7 +27,7 @@ export default function MobileMenu() {
             <div className="p-4">
               <div className="flex justify-between items-center mb-8">
                 <Link href="/" className="flex items-center" onClick={() => setIsOpen(false)}>
-                  <span className="text-xl font-bold text-blue-600">Oyibest</span>
+                  <span className="text-xl font-bold text-blue-600">Onyibest</span>
                   <span className="text-gray-600 ml-1">Properties</span>
                 </Link>
                 <button

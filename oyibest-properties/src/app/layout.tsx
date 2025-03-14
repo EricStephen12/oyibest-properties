@@ -8,8 +8,8 @@ import { Toaster } from 'react-hot-toast'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Oyibest Properties & Rentals',
-  description: 'Find your dream property with Oyibest Properties & Rentals - Your trusted real estate partner.',
+  title: 'Onyibest Properties & Rentals',
+  description: 'Find your dream property with Onyibest Properties & Rentals - Your trusted real estate partner.',
   manifest: '/manifest.json',
   icons: {
     icon: [

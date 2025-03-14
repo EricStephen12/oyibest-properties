@@ -9,6 +9,7 @@ import { FaPlus, FaHome, FaEnvelope, FaChartLine, FaCalendarAlt } from 'react-ic
 import { motion } from 'framer-motion'
 import { Property } from '@/types/property'
 import { formatPrice } from '@/utils/format'
+import Image from 'next/image'
 
 interface Message {
   id: string
@@ -97,7 +98,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -110,7 +111,7 @@ export default function AdminDashboard() {
         >
           <Link
             href="/admin/properties/new"
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto justify-center"
           >
             <FaPlus className="mr-2" />
             Add Property
@@ -119,7 +120,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -153,54 +154,15 @@ export default function AdminDashboard() {
             </div>
           </div>
         </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
-        >
-          <div className="flex items-center">
-            <div className="p-3 bg-purple-100 rounded-lg">
-              <FaChartLine className="h-6 w-6 text-purple-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Active Listings</p>
-              <h3 className="text-2xl font-bold text-gray-900">{stats.totalProperties}</h3>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
-        >
-          <div className="flex items-center">
-            <div className="p-3 bg-orange-100 rounded-lg">
-              <FaCalendarAlt className="h-6 w-6 text-orange-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">New This Month</p>
-              <h3 className="text-2xl font-bold text-gray-900">
-                {stats.recentProperties.filter(p => {
-                  const date = new Date(p.createdAt.seconds * 1000)
-                  return date.getMonth() === new Date().getMonth()
-                }).length}
-              </h3>
-            </div>
-          </div>
-        </motion.div>
       </div>
 
-      {/* Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {/* Recent Items Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Properties */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.3 }}
           className="bg-white rounded-xl shadow-sm overflow-hidden"
         >
           <div className="p-6 border-b border-gray-100">
@@ -210,16 +172,19 @@ export default function AdminDashboard() {
             {stats.recentProperties.map((property: any) => (
               <Link
                 key={property.id}
-                href={`/admin/properties/${property.id}`}
-                className="block p-6 hover:bg-gray-50 transition-colors"
+                href={`/admin/properties/${property.id}/edit`}
+                className="block p-4 hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center space-x-4">
                   {property.images?.[0] && (
-                    <img
-                      src={property.images[0]}
-                      alt={property.title}
-                      className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
-                    />
+                    <div className="relative h-12 w-12 flex-shrink-0">
+                      <Image
+                        src={property.images[0]}
+                        alt={property.title}
+                        fill
+                        className="rounded-lg object-cover"
+                      />
+                    </div>
                   )}
                   <div className="min-w-0 flex-1">
                     <h3 className="font-medium text-gray-900 truncate">{property.title}</h3>
@@ -228,7 +193,7 @@ export default function AdminDashboard() {
                         {property.location}
                       </p>
                       <span className="text-sm text-gray-500 whitespace-nowrap">
-                        • {formatPrice(property.price)}
+                        ₦{property.price.toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -250,7 +215,7 @@ export default function AdminDashboard() {
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.4 }}
           className="bg-white rounded-xl shadow-sm overflow-hidden"
         >
           <div className="p-6 border-b border-gray-100">
@@ -258,23 +223,18 @@ export default function AdminDashboard() {
           </div>
           <div className="divide-y divide-gray-100">
             {stats.recentMessages.map((message: any) => (
-              <div key={message.id} className="p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-medium text-gray-900 truncate">{message.name}</h3>
-                      <span className="text-gray-400">•</span>
-                      <p className="text-sm text-gray-500 truncate">{message.email}</p>
-                    </div>
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-600 line-clamp-2 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-                        {message.message}
-                      </p>
-                    </div>
+              <div key={message.id} className="p-4">
+                <div className="flex items-start space-x-4">
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-gray-900 truncate">{message.name}</p>
+                    <p className="text-sm text-gray-500 truncate mt-1">{message.email}</p>
+                    <p className="text-sm text-gray-600 line-clamp-2 mt-2">{message.message}</p>
                   </div>
-                  <span className="text-sm text-gray-500 whitespace-nowrap flex-shrink-0">
-                    {new Date(message.createdAt?.seconds * 1000).toLocaleDateString()}
-                  </span>
+                  <div className="flex-shrink-0">
+                    <span className="text-xs text-gray-500">
+                      {new Date(message.createdAt?.seconds * 1000).toLocaleDateString()}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}

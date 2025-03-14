@@ -10,7 +10,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <span className="text-2xl font-bold text-blue-600">Oyibest</span>
+            <span className="text-2xl font-bold text-blue-600">Onyibest</span>
             <span className="text-gray-600 ml-1">Properties</span>
           </Link>
 

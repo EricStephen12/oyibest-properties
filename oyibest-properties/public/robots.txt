@@ -7,4 +7,4 @@ Disallow: /admin/
 Disallow: /api/
 
 # Sitemap location
-Sitemap: https://oyibest-properties.com/sitemap.xml 
+Sitemap: https://onyibest-properties.com/sitemap.xml 

@@ -63,8 +63,11 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header */}
-      <div className="lg:hidden bg-white shadow-sm py-4 px-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-blue-600">Admin Dashboard</h1>
+      <div className="lg:hidden bg-white shadow-sm py-4 px-4 flex items-center justify-between sticky top-0 z-50">
+        <div className="flex items-center">
+          <h2 className="text-xl font-bold text-blue-600">Onyibest</h2>
+          <span className="text-gray-600 ml-1">Admin</span>
+        </div>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
@@ -89,7 +92,7 @@ export default function AdminLayout({
             <Link href="/admin/dashboard" className="flex items-center">
               {isSidebarOpen ? (
                 <>
-                  <h2 className="text-2xl font-bold text-blue-600">Oyibest</h2>
+                  <h2 className="text-2xl font-bold text-blue-600">Onyibest</h2>
                   <span className="text-gray-600 ml-1">Admin</span>
                 </>
               ) : (
@@ -136,15 +139,19 @@ export default function AdminLayout({
         {/* Overlay */}
         {isMobileMenuOpen && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-5 z-30 lg:hidden"
+            className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
             onClick={() => setIsMobileMenuOpen(false)}
           />
         )}
 
         {/* Main Content */}
-        <main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
-          <div className="max-w-7xl mx-auto">
-            {children}
+        <main className={`flex-1 min-h-screen transition-all duration-300 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
+          <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+              <div className="p-4 sm:p-6 lg:p-8">
+                {children}
+              </div>
+            </div>
           </div>
         </main>
       </div>

@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Company Info */}
           <div>
-            <h3 className="text-2xl font-bold mb-4">Oyibest Properties</h3>
+            <h3 className="text-2xl font-bold mb-4">Onyibest Properties</h3>
             <p className="text-gray-300 mb-4">
               Your trusted partner in finding the perfect property for your needs.
             </p>
@@ -56,7 +56,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Oyibest Properties. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Onyibest Properties. All rights reserved.</p>
         </div>
       </div>
     </footer>

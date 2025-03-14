@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: oyibest-properties
+    name: onyibest-properties
     env: node
-    rootDir: oyibest-properties
-    buildCommand: npm install --legacy-peer-deps && npm run build
+    rootDir: onyibest-properties
+    buildCommand: cd onyibest-properties && npm install && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_VERSION
