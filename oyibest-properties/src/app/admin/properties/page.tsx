@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa'
 import toast from 'react-hot-toast'
 import Image from 'next/image'
+import { formatPrice } from '@/utils/format'
 
 export default function AdminProperties() {
   const [properties, setProperties] = useState([])
@@ -105,39 +106,43 @@ export default function AdminProperties() {
                         className="rounded-md object-cover"
                       />
                     </div>
-                    <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">
+                    <div className="ml-4 max-w-xs">
+                      <div className="text-sm font-medium text-gray-900 truncate">
                         {property.title}
                       </div>
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{property.location}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
-                    ₦{property.price.toLocaleString()}
+                <td className="px-6 py-4">
+                  <div className="text-sm text-gray-900 max-w-xs truncate">
+                    {property.location}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                  <div className="text-sm text-gray-900">
+                    {formatPrice(property.price)}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 capitalize">
                     {property.type}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <Link
-                    href={`/admin/properties/${property.id}/edit`}
-                    className="text-blue-600 hover:text-blue-900 mr-4"
-                  >
-                    <FaEdit className="inline-block" />
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(property.id)}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    <FaTrash className="inline-block" />
-                  </button>
+                  <div className="flex justify-end items-center gap-4">
+                    <Link
+                      href={`/admin/properties/${property.id}/edit`}
+                      className="text-blue-600 hover:text-blue-900"
+                    >
+                      <FaEdit className="w-4 h-4" />
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(property.id)}
+                      className="text-red-600 hover:text-red-900"
+                    >
+                      <FaTrash className="w-4 h-4" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -159,31 +164,35 @@ export default function AdminProperties() {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-gray-900 truncate">
-                    {property.title}
-                  </h3>
-                  <div className="flex items-center space-x-2">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 pr-4">
+                    <h3 className="text-sm font-medium text-gray-900 truncate">
+                      {property.title}
+                    </h3>
+                    <p className="mt-1 text-sm text-gray-500 break-words">
+                      {property.location}
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-2 flex-shrink-0">
                     <Link
                       href={`/admin/properties/${property.id}/edit`}
-                      className="text-blue-600 hover:text-blue-900"
+                      className="text-blue-600 hover:text-blue-900 p-2"
                     >
-                      <FaEdit className="h-4 w-4" />
+                      <FaEdit className="w-4 h-4" />
                     </Link>
                     <button
                       onClick={() => handleDelete(property.id)}
-                      className="text-red-600 hover:text-red-900"
+                      className="text-red-600 hover:text-red-900 p-2"
                     >
-                      <FaTrash className="h-4 w-4" />
+                      <FaTrash className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
-                <p className="mt-1 text-sm text-gray-500">{property.location}</p>
                 <div className="mt-2 flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-900">
-                    ₦{property.price.toLocaleString()}
+                    {formatPrice(property.price)}
                   </span>
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 capitalize">
                     {property.type}
                   </span>
                 </div>

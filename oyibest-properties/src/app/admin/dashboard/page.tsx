@@ -212,19 +212,24 @@ export default function AdminDashboard() {
                 href={`/admin/properties/${property.id}`}
                 className="block p-6 hover:bg-gray-50 transition-colors"
               >
-                <div className="flex items-center">
+                <div className="flex items-center space-x-4">
                   {property.images?.[0] && (
                     <img
                       src={property.images[0]}
                       alt={property.title}
-                      className="w-12 h-12 rounded-lg object-cover"
+                      className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
                     />
                   )}
-                  <div className="ml-4">
-                    <h3 className="font-medium text-gray-900">{property.title}</h3>
-                    <p className="text-sm text-gray-500 mt-1">
-                      {property.location} • ₦{property.price.toLocaleString()}
-                    </p>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-medium text-gray-900 truncate">{property.title}</h3>
+                    <div className="flex items-center gap-2 mt-1">
+                      <p className="text-sm text-gray-500 truncate flex-1">
+                        {property.location}
+                      </p>
+                      <span className="text-sm text-gray-500 whitespace-nowrap">
+                        • {formatPrice(property.price)}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </Link>
@@ -253,16 +258,23 @@ export default function AdminDashboard() {
           <div className="divide-y divide-gray-100">
             {stats.recentMessages.map((message: any) => (
               <div key={message.id} className="p-6">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-medium text-gray-900">{message.name}</h3>
-                    <p className="text-sm text-gray-500 mt-1">{message.email}</p>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-medium text-gray-900 truncate">{message.name}</h3>
+                      <span className="text-gray-400">•</span>
+                      <p className="text-sm text-gray-500 truncate">{message.email}</p>
+                    </div>
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-600 line-clamp-2 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                        {message.message}
+                      </p>
+                    </div>
                   </div>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-gray-500 whitespace-nowrap flex-shrink-0">
                     {new Date(message.createdAt?.seconds * 1000).toLocaleDateString()}
                   </span>
                 </div>
-                <p className="mt-3 text-sm text-gray-600 line-clamp-2">{message.message}</p>
               </div>
             ))}
           </div>
