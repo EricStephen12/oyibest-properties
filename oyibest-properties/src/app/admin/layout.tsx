@@ -6,7 +6,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/lib/firebase/config'
 import Link from 'next/link'
-import { FaHome, FaList, FaEnvelope, FaSignOutAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import { FaHome, FaList, FaEnvelope, FaSignOutAlt, FaChevronLeft, FaChevronRight, FaBuilding } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function AdminLayout({
@@ -17,8 +17,7 @@ export default function AdminLayout({
   const router = useRouter()
   const pathname = usePathname()
   const [loading, setLoading] = useState(true)
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -67,87 +66,67 @@ export default function AdminLayout({
         <motion.aside
           initial={false}
           animate={{ 
-            width: isSidebarOpen ? 256 : 80,
+            width: isSidebarOpen ? 240 : 72,
             transition: { duration: 0.3 }
           }}
-          className={`fixed lg:relative top-0 left-0 z-40 h-full bg-white shadow-lg lg:shadow-md transform lg:transform-none transition-all duration-300 ease-in-out ${
-            isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-          }`}
+          className="fixed top-0 left-0 z-40 h-full bg-white shadow-lg flex flex-col"
         >
-          {/* Mobile Toggle Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="lg:hidden absolute right-4 top-4 p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200"
-          >
-            <FaChevronLeft className="h-5 w-5" />
-          </button>
-
-          <div className={`p-6 flex items-center ${!isSidebarOpen && 'justify-center'}`}>
-            <Link href="/admin/dashboard" className="flex items-center">
-              {isSidebarOpen ? (
-                <>
-                  <h2 className="text-2xl font-bold text-blue-600">Onyibest</h2>
-                  <span className="text-gray-600 ml-1">Admin</span>
-                </>
-              ) : (
-                <h2 className="text-2xl font-bold text-blue-600">O</h2>
+          {/* Logo */}
+          <div className="p-4 flex items-center justify-center border-b border-gray-100">
+            <Link href="/admin/dashboard" className="flex items-center justify-center">
+              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                <FaBuilding className="w-6 h-6" />
+              </div>
+              {isSidebarOpen && (
+                <span className="ml-3 font-semibold text-gray-900">Admin Panel</span>
               )}
             </Link>
           </div>
 
-          <nav className="mt-6 px-4">
+          {/* Navigation */}
+          <nav className="flex-1 overflow-y-auto py-4">
             {menuItems.map((item) => (
               <Link
                 key={item.path}
                 href={item.path}
-                className={`flex items-center px-4 py-3 mb-2 rounded-lg transition-colors ${
+                className={`flex items-center px-4 py-3 mx-2 rounded-lg transition-colors ${
                   pathname === item.path
                     ? 'bg-blue-50 text-blue-600'
                     : 'text-gray-600 hover:bg-gray-50'
                 }`}
-                onClick={() => setIsMobileMenuOpen(false)}
               >
-                <item.icon className="w-5 h-5" />
-                {isSidebarOpen && <span className="font-medium ml-3">{item.label}</span>}
+                <item.icon className={`w-5 h-5 ${isSidebarOpen ? 'mr-3' : ''}`} />
+                {isSidebarOpen && <span className="font-medium">{item.label}</span>}
               </Link>
             ))}
-
-            <button
-              onClick={handleSignOut}
-              className="flex items-center w-full px-4 py-3 mt-4 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
-            >
-              <FaSignOutAlt className="w-5 h-5" />
-              {isSidebarOpen && <span className="font-medium ml-3">Sign Out</span>}
-            </button>
           </nav>
 
-          {/* Desktop Toggle Button */}
+          {/* Sign Out Button */}
+          <div className="p-4 border-t border-gray-100">
+            <button
+              onClick={handleSignOut}
+              className={`flex items-center w-full px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors ${
+                isSidebarOpen ? 'justify-start' : 'justify-center'
+              }`}
+            >
+              <FaSignOutAlt className={`w-5 h-5 ${isSidebarOpen ? 'mr-3' : ''}`} />
+              {isSidebarOpen && <span className="font-medium">Sign Out</span>}
+            </button>
+          </div>
+
+          {/* Toggle Button */}
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="hidden lg:flex absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 rounded-full bg-white shadow-md items-center justify-center text-gray-600 hover:text-gray-900"
+            className="absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-gray-900"
           >
             <FaChevronLeft className={`h-4 w-4 transform transition-transform ${!isSidebarOpen ? 'rotate-180' : ''}`} />
           </button>
         </motion.aside>
 
-        {/* Mobile Menu Button - Fixed at the top left corner */}
-        <button
-          onClick={() => setIsMobileMenuOpen(true)}
-          className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-full bg-white shadow-md text-gray-600 hover:bg-gray-50"
-        >
-          <FaChevronRight className="h-5 w-5" />
-        </button>
-
-        {/* Overlay */}
-        {isMobileMenuOpen && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-        )}
-
         {/* Main Content */}
-        <main className={`flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
+        <main className={`flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 transition-all duration-300 ${
+          isSidebarOpen ? 'ml-60' : 'ml-[72px]'
+        }`}>
           <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
             {children}
           </div>

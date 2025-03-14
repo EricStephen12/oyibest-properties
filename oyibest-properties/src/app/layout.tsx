@@ -36,6 +36,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Check if the current path is an admin route
+  const isAdminRoute = typeof window !== 'undefined' ? window.location.pathname.startsWith('/admin') : false
+
   return (
     <html lang="en">
       <head>
@@ -46,11 +49,11 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <div className="min-h-screen flex flex-col">
-          <Navbar />
-          <main className="flex-grow">
+          {!isAdminRoute && <Navbar />}
+          <main className={`flex-grow ${!isAdminRoute ? '' : 'pt-0'}`}>
             {children}
           </main>
-          <Footer />
+          {!isAdminRoute && <Footer />}
         </div>
         <Toaster position="bottom-right" />
       </body>
