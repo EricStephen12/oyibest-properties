@@ -100,7 +100,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             View Details
           </Link>
           <a
-            href={`https://wa.me/${property.contactWhatsapp || ''}?text=Hi, I'm interested in the property: ${property.title}`}
+            href={`https://wa.me/${property.contactWhatsapp?.replace(/[^0-9]/g, '')}?text=Hi, I'm interested in the property: ${encodeURIComponent(property.title)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
