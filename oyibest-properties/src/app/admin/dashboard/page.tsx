@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { FaPlus, FaHome, FaEnvelope, FaChartLine, FaCalendarAlt } from 'react-icons/fa'
 import { motion } from 'framer-motion'
 import { Property } from '@/types/property'
+import { formatPrice } from '@/utils/format'
 
 interface Message {
   id: string

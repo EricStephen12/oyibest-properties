@@ -13,12 +13,13 @@ export const metadata = {
   manifest: '/manifest.json',
   icons: {
     icon: [
-      { url: '/icon-192.png' },
-      { url: '/icon-512.png' }
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icon-192.svg', type: 'image/svg+xml' },
+      { url: '/icon-512.svg', type: 'image/svg+xml' }
     ],
     apple: [
-      { url: '/icon-192.png' },
-      { url: '/icon-512.png' }
+      { url: '/icon-192.svg', type: 'image/svg+xml' },
+      { url: '/icon-512.svg', type: 'image/svg+xml' }
     ]
   }
 }
@@ -40,7 +41,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/icon-512.svg" sizes="512x512" type="image/svg+xml" />
         <link rel="icon" href="/icon-192.svg" sizes="192x192" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <link rel="apple-touch-icon" href="/icon-192.svg" type="image/svg+xml" />
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={inter.className}>
