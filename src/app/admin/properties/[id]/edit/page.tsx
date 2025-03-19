@@ -7,6 +7,7 @@ import { doc, getDoc } from 'firebase/firestore'
 import { db } from '@/lib/firebase/config'
 import PropertyForm from '@/app/components/PropertyForm'
 import { Property } from '@/types/property'
+import Link from 'next/link'
 
 export default function EditProperty() {
   const { id } = useParams()
@@ -56,15 +57,18 @@ export default function EditProperty() {
   }
 
   return (
-    <div>
-      <div className="mb-8">
+    <div className="max-w-4xl mx-auto">
+      <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Edit Property</h1>
-        <p className="mt-2 text-sm text-gray-600">
-          Update the property details below.
-        </p>
+        <Link
+          href="/admin/properties"
+          className="text-blue-600 hover:text-blue-800"
+        >
+          Back to Properties
+        </Link>
       </div>
 
-      <div className="bg-white shadow-md rounded-lg p-6">
+      <div className="bg-white rounded-xl shadow-sm p-6">
         <PropertyForm property={property} isEditing />
       </div>
     </div>

@@ -4,8 +4,9 @@
 import { useState, useEffect } from 'react'
 import { collection, getDocs, query, orderBy, deleteDoc, doc } from 'firebase/firestore'
 import { db } from '@/lib/firebase/config'
-import { FaTrash } from 'react-icons/fa'
+import { FaTrash, FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import toast from 'react-hot-toast'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface Message {
   id: string
@@ -19,6 +20,7 @@ interface Message {
 export default function Messages() {
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
+  const [expandedMessages, setExpandedMessages] = useState<string[]>([])
 
   const fetchMessages = async () => {
     try {
@@ -57,6 +59,16 @@ export default function Messages() {
     }
   }
 
+  const toggleMessage = (id: string) => {
+    setExpandedMessages(prev => 
+      prev.includes(id) 
+        ? prev.filter(msgId => msgId !== id)
+        : [...prev, id]
+    )
+  }
+
+  const isMessageExpanded = (id: string) => expandedMessages.includes(id)
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -82,27 +94,63 @@ export default function Messages() {
         ) : (
           <div className="divide-y divide-gray-200">
             {messages.map((message) => (
-              <div key={message.id} className="p-6">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900">{message.name}</h3>
-                    <p className="text-sm text-gray-500">{message.email}</p>
-                    <p className="text-sm text-gray-500">{message.phone}</p>
+              <motion.div
+                key={message.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="p-4 sm:p-6"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                  <div className="flex-1 min-w-0 overflow-hidden">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                      <h3 className="text-lg font-medium text-gray-900 truncate">
+                        {message.name}
+                      </h3>
+                      <div className="flex flex-wrap gap-2 text-sm text-gray-500">
+                        <a href={`mailto:${message.email}`} className="hover:text-blue-600 break-all">
+                          {message.email}
+                        </a>
+                        <span>•</span>
+                        <a href={`tel:${message.phone}`} className="hover:text-blue-600">
+                          {message.phone}
+                        </a>
+                      </div>
+                    </div>
+                    
+                    <div className="relative">
+                      <p className={`text-gray-600 break-words ${
+                        !isMessageExpanded(message.id) ? 'line-clamp-3' : ''
+                      }`} style={{ wordBreak: 'break-word', overflowWrap: 'break-word', maxWidth: '100%' }}>
+                        {message.message}
+                      </p>
+                      {message.message.length > 150 && (
+                        <button
+                          onClick={() => toggleMessage(message.id)}
+                          className="mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
+                        >
+                          {isMessageExpanded(message.id) ? (
+                            <>Show less <FaChevronUp className="w-4 h-4" /></>
+                          ) : (
+                            <>Show more <FaChevronDown className="w-4 h-4" /></>
+                          )}
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex items-center">
-                    <span className="text-sm text-gray-500 mr-4">
-                      {message.createdAt.toLocaleDateString()}
+
+                  <div className="flex items-center gap-4 mt-2 sm:mt-0 shrink-0">
+                    <span className="text-sm text-gray-500 whitespace-nowrap">
+                      {message.createdAt.toLocaleDateString()} {message.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                     <button
                       onClick={() => handleDelete(message.id)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-red-600 hover:text-red-800 p-2 rounded-full hover:bg-red-50 transition-colors"
                     >
-                      <FaTrash />
+                      <FaTrash className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
-                <p className="mt-4 text-gray-600">{message.message}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         )}

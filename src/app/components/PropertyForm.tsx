@@ -8,13 +8,16 @@ import { db } from '@/lib/firebase/config'
 import { uploadToCloudinary } from '@/utils/cloudinary'
 import toast from 'react-hot-toast'
 import { Property } from '@/types/property'
-import { FaCloudUploadAlt, FaSpinner, FaTrash } from 'react-icons/fa'
+import { FaCloudUploadAlt, FaSpinner, FaTrash, FaSave } from 'react-icons/fa'
 import Image from 'next/image'
 
 interface PropertyFormProps {
   property?: Property
   isEditing?: boolean
 }
+
+// Form data storage key for localStorage
+const STORAGE_KEY = 'property_form_draft'
 
 export default function PropertyForm({ property, isEditing }: PropertyFormProps) {
   const router = useRouter()
@@ -35,7 +38,11 @@ export default function PropertyForm({ property, isEditing }: PropertyFormProps)
     contactWhatsapp: '',
     featured: false
   })
+  const [hasSavedDraft, setHasSavedDraft] = useState(false)
+  const [lastSaved, setLastSaved] = useState<string | null>(null)
+  const [isAutoSaving, setIsAutoSaving] = useState(false)
 
+  // Load saved form data if editing or restore from localStorage
   useEffect(() => {
     if (property && isEditing) {
       setFormData({
@@ -53,8 +60,81 @@ export default function PropertyForm({ property, isEditing }: PropertyFormProps)
         contactWhatsapp: property.contactWhatsapp,
         featured: property.featured || false
       })
+      // Clear any draft when editing an existing property
+      localStorage.removeItem(STORAGE_KEY)
+    } else {
+      // Check for saved draft
+      const savedDraft = localStorage.getItem(STORAGE_KEY)
+      if (savedDraft) {
+        try {
+          const parsedData = JSON.parse(savedDraft)
+          setFormData(parsedData.formData)
+          setHasSavedDraft(true)
+          setLastSaved(parsedData.timestamp)
+          toast.success('Your draft has been restored')
+        } catch (error) {
+          console.error('Error parsing saved draft:', error)
+          localStorage.removeItem(STORAGE_KEY)
+        }
+      }
     }
   }, [property, isEditing])
+
+  // Auto-save form data periodically
+  useEffect(() => {
+    // Skip auto-saving when in edit mode or when form is empty
+    if (isEditing || !formData.title) return
+    
+    // Save form data every 30 seconds if there are changes
+    const autoSaveInterval = setInterval(() => {
+      saveDraft(true)
+    }, 30000)
+    
+    return () => clearInterval(autoSaveInterval)
+  }, [formData, isEditing])
+
+  // Save draft to localStorage
+  const saveDraft = (isAuto = false) => {
+    try {
+      // Don't save if in edit mode
+      if (isEditing) return
+
+      // Check if form has some content worth saving
+      if (!formData.title && !formData.description && !formData.location && formData.images.length === 0) {
+        return
+      }
+
+      const timestamp = new Date().toISOString()
+      const dataToSave = {
+        formData,
+        timestamp
+      }
+      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave))
+      setLastSaved(timestamp)
+      setHasSavedDraft(true)
+      
+      if (!isAuto) {
+        toast.success('Draft saved successfully')
+      } else {
+        setIsAutoSaving(true)
+        setTimeout(() => setIsAutoSaving(false), 2000)
+      }
+    } catch (error) {
+      console.error('Error saving draft:', error)
+      if (!isAuto) {
+        toast.error('Failed to save draft')
+      }
+    }
+  }
+
+  // Clear saved draft
+  const clearDraft = () => {
+    localStorage.removeItem(STORAGE_KEY)
+    setHasSavedDraft(false)
+    setLastSaved(null)
+    toast.success('Draft cleared')
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -129,6 +209,8 @@ export default function PropertyForm({ property, isEditing }: PropertyFormProps)
       } else {
         await addDoc(collection(db, 'properties'), propertyData)
         toast.success('Property added successfully')
+        // Clear draft after successful submission
+        localStorage.removeItem(STORAGE_KEY)
       }
 
       router.push('/admin/properties')
@@ -141,9 +223,61 @@ export default function PropertyForm({ property, isEditing }: PropertyFormProps)
 
     console.log('Form Data:', formData);
   }
+  
+  // Format last saved time
+  const formatLastSaved = () => {
+    if (!lastSaved) return null
+    try {
+      const date = new Date(lastSaved)
+      return date.toLocaleString()
+    } catch (e) {
+      return 'Recently'
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Draft management info */}
+      {!isEditing && (
+        <div className={`flex items-center justify-between p-4 rounded-lg ${hasSavedDraft ? 'bg-blue-50' : 'bg-gray-50'}`}>
+          <div>
+            {hasSavedDraft ? (
+              <div className="space-y-1">
+                <p className="text-sm font-medium text-blue-800">
+                  <span>{isAutoSaving ? 'Auto-saving...' : 'Draft available'}</span>
+                  {lastSaved && !isAutoSaving && (
+                    <span className="ml-2 text-blue-600/70">Last saved: {formatLastSaved()}</span>
+                  )}
+                </p>
+                <p className="text-xs text-blue-600/80">Your progress is automatically saved every 30 seconds</p>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-600">Your progress will be automatically saved as you type</p>
+            )}
+          </div>
+          <div className="flex space-x-2">
+            {hasSavedDraft && (
+              <button
+                type="button"
+                onClick={clearDraft}
+                className="px-3 py-1 text-xs text-red-600 hover:text-red-800 border border-red-200 rounded-md hover:bg-red-50"
+              >
+                Clear Draft
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => saveDraft()}
+              className={`px-3 py-1 text-xs border rounded-md flex items-center space-x-1 
+                ${hasSavedDraft ? 'text-blue-600 hover:text-blue-800 border-blue-200 hover:bg-blue-50' : 'text-gray-600 hover:text-gray-800 border-gray-200 hover:bg-gray-100'}`}
+            >
+              <FaSave className="w-3 h-3" />
+              <span>Save Draft</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
           <label className="block text-sm font-medium text-gray-700">Title</label>

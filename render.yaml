@@ -1,13 +1,17 @@
 services:
   - type: web
-    name: oyibest-properties
+    name: onyibest-properties
     env: node
-    rootDir: oyibest-properties
+    rootDir: .
     buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
+      - key: NODE_VERSION
+        value: 18.19.0
       - key: NODE_ENV
-        value: production
+        value: "production"
+      - key: NEXT_PUBLIC_NODE_ENV
+        value: "production"
       - key: NEXT_PUBLIC_FIREBASE_API_KEY
         sync: false
       - key: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
@@ -27,4 +31,7 @@ services:
       - key: NEXT_PUBLIC_CLOUDINARY_API_KEY
         sync: false
       - key: CLOUDINARY_API_SECRET
-        sync: false 
+        sync: false
+    healthCheckPath: /health
+    healthCheckTimeout: 300
+    autoDeploy: true 

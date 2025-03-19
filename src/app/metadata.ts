@@ -3,57 +3,57 @@ import { Metadata } from 'next'
 
 const defaultMetadata: Metadata = {
   title: {
-    default: 'Oyibest Properties - Real Estate in Nigeria',
-    template: '%s | Oyibest Properties'
+    default: 'Onyibest Properties - Real Estate in Nigeria',
+    template: '%s | Onyibest Properties'
   },
-  description: 'Find your dream home with Oyibest Properties. Browse through our extensive collection of properties for sale and rent in Nigeria.',
+  description: 'Find your dream home with Onyibest Properties. Browse through our extensive collection of properties for sale and rent in Nigeria.',
   keywords: [
     'real estate',
-    'property',
-    'nigeria',
+    'properties',
     'houses for sale',
     'houses for rent',
-    'apartments',
-    'real estate agent',
-    'property listings',
-    'oyibest properties'
+    'land for sale',
+    'nigeria real estate',
+    'property listing',
+    'real estate agency',
+    'onyibest properties'
   ],
-  authors: [{ name: 'Oyibest Properties' }],
-  creator: 'Oyibest Properties',
-  publisher: 'Oyibest Properties',
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+  authors: [{ name: 'Onyibest Properties' }],
+  creator: 'Onyibest Properties',
+  publisher: 'Onyibest Properties',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/shortcut-icon.png',
+    apple: '/apple-icon.png',
+    other: {
+      rel: 'apple-touch-icon-precomposed',
+      url: '/apple-touch-icon-precomposed.png',
     },
   },
+  manifest: '/manifest.json',
   openGraph: {
-    type: 'website',
-    locale: 'en_NG',
-    url: 'https://oyibest-properties.com',
-    siteName: 'Oyibest Properties',
-    title: 'Oyibest Properties - Real Estate in Nigeria',
-    description: 'Find your dream home with Oyibest Properties. Browse through our extensive collection of properties for sale and rent in Nigeria.',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Oyibest Properties'
-      }
-    ]
+    url: 'https://onyibest-properties.com',
+    siteName: 'Onyibest Properties',
+    title: 'Onyibest Properties - Real Estate in Nigeria',
+    description: 'Find your dream home with Onyibest Properties. Browse through our extensive collection of properties for sale and rent in Nigeria.',
+    images: [{
+      url: '/og-image.jpg',
+      width: 1200,
+      height: 630,
+      alt: 'Onyibest Properties'
+    }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Oyibest Properties - Real Estate in Nigeria',
-    description: 'Find your dream home with Oyibest Properties. Browse through our extensive collection of properties for sale and rent in Nigeria.',
+    title: 'Onyibest Properties - Real Estate in Nigeria',
+    description: 'Find your dream home with Onyibest Properties. Browse through our extensive collection of properties for sale and rent in Nigeria.',
     images: ['/twitter-image.jpg'],
-    creator: '@oyibestproperties'
+    creator: '@onyibestproperties'
   },
   viewport: {
     width: 'device-width',
@@ -66,7 +66,7 @@ const defaultMetadata: Metadata = {
     yahoo: 'your-yahoo-verification-code',
   },
   alternates: {
-    canonical: 'https://oyibest-properties.com',
+    canonical: 'https://onyibest-properties.com',
   },
 }
 
