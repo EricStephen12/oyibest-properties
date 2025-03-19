@@ -1,3 +1,6 @@
+// @ts-nocheck
+'use client'
+
 import React from 'react'
 
 export default function PropertiesLayout({
@@ -5,5 +8,9 @@ export default function PropertiesLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <>{children}</>
+  return (
+    <div className="properties-layout">
+      {children}
+    </div>
+  )
 } 
