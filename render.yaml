@@ -2,6 +2,7 @@ services:
   - type: web
     name: oyibest-properties
     env: node
+    rootDir: .
     repo: https://github.com/EricStephen12/oyibest-properties.git
     branch: main
     buildCommand: npm install && npm run build
