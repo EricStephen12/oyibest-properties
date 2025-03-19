@@ -20,10 +20,14 @@ export const metadata = {
       { url: '/icon-192.png' },
       { url: '/icon-512.png' }
     ]
-  },
-  viewport: {
-    themeColor: '#2563EB',
-  },
+  }
+}
+
+export const viewport = {
+  themeColor: '#2563EB',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 }
 
 export default function RootLayout({

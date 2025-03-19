@@ -9,6 +9,43 @@ import { Property, PropertyFilter } from '@/types/property'
 import { getProperties } from '@/lib/firebase/properties'
 import { motion, AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
+import { ErrorBoundary } from 'react-error-boundary'
+
+function ErrorFallback({ error, resetErrorBoundary }) {
+  return (
+    <div className="text-center py-12">
+      <h2 className="text-xl font-medium text-gray-900 mb-4">Something went wrong:</h2>
+      <pre className="text-red-600 mb-4">{error.message}</pre>
+      <button
+        onClick={resetErrorBoundary}
+        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+      >
+        Try again
+      </button>
+    </div>
+  )
+}
+
+function LoadingFallback() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div
+          key={i}
+          className="bg-white rounded-lg shadow-md h-96 animate-pulse"
+        >
+          <div className="h-48 bg-gray-200 rounded-t-lg" />
+          <div className="p-4 space-y-4">
+            <div className="h-4 bg-gray-200 rounded w-3/4" />
+            <div className="h-4 bg-gray-200 rounded w-1/2" />
+            <div className="h-4 bg-gray-200 rounded w-2/3" />
+            <div className="h-8 bg-gray-200 rounded w-1/3" />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
 
 function PropertiesContent() {
   const router = useRouter()
@@ -20,6 +57,8 @@ function PropertiesContent() {
 
   // Get initial filters from URL parameters
   useEffect(() => {
+    if (!searchParams) return
+
     const initialFilters: PropertyFilter = {
       type: searchParams.get('type') as 'sale' | 'rent' || undefined,
       minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
@@ -98,21 +137,7 @@ function PropertiesContent() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {loading ? (
-              // Loading skeleton
-              Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-white rounded-lg shadow-md h-96 animate-pulse"
-                >
-                  <div className="h-48 bg-gray-200 rounded-t-lg" />
-                  <div className="p-4 space-y-4">
-                    <div className="h-4 bg-gray-200 rounded w-3/4" />
-                    <div className="h-4 bg-gray-200 rounded w-1/2" />
-                    <div className="h-4 bg-gray-200 rounded w-2/3" />
-                    <div className="h-8 bg-gray-200 rounded w-1/3" />
-                  </div>
-                </div>
-              ))
+              <LoadingFallback />
             ) : properties.length > 0 ? (
               properties.map(property => (
                 <PropertyCard key={property.id} property={property} />
@@ -138,30 +163,10 @@ function PropertiesContent() {
 
 export default function Properties() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/4 mb-4" />
-            <div className="h-12 bg-gray-200 rounded mb-8" />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="bg-white rounded-lg shadow-md h-96">
-                  <div className="h-48 bg-gray-200 rounded-t-lg" />
-                  <div className="p-4 space-y-4">
-                    <div className="h-4 bg-gray-200 rounded w-3/4" />
-                    <div className="h-4 bg-gray-200 rounded w-1/2" />
-                    <div className="h-4 bg-gray-200 rounded w-2/3" />
-                    <div className="h-8 bg-gray-200 rounded w-1/3" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    }>
-      <PropertiesContent />
-    </Suspense>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Suspense fallback={<LoadingFallback />}>
+        <PropertiesContent />
+      </Suspense>
+    </ErrorBoundary>
   )
 }
