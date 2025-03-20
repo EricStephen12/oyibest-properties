@@ -5,14 +5,30 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaBed, FaBath, FaRulerCombined, FaPhone, FaWhatsapp, FaTimes, FaChevronLeft, FaChevronRight, FaCalendarAlt } from 'react-icons/fa'
 import { useParams } from 'next/navigation'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, type DocumentData } from 'firebase/firestore'
 import { db } from '@/lib/firebase/config'
+
+interface Property extends DocumentData {
+  title: string;
+  location: string;
+  price: number;
+  description?: string;
+  images?: string[];
+  bedrooms?: number;
+  bathrooms?: number;
+  squareFootage?: number;
+  features?: string[];
+  contactPhone?: string;
+  contactWhatsapp?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
 export default function PropertyDetails() {
   const [activeImage, setActiveImage] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
-  const [property, setProperty] = useState(null)
-  const [error, setError] = useState(null)
+  const [property, setProperty] = useState<Property | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [showLightbox, setShowLightbox] = useState(false)
   const touchStartX = useRef(0)
   const touchEndX = useRef(0)
