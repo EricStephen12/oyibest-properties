@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaBed, FaBath, FaRulerCombined, FaPhone, FaWhatsapp, FaTimes, FaChevronLeft, FaChevronRight, FaCalendarAlt } from 'react-icons/fa'
 import { useParams } from 'next/navigation'
-import { doc, getDoc, type DocumentData } from 'firebase/firestore'
+import { doc, getDoc, type DocumentData, type DocumentReference } from 'firebase/firestore'
 import { db } from '@/lib/firebase/config'
 
 interface Property extends DocumentData {
@@ -33,13 +33,13 @@ export default function PropertyDetails() {
   const touchStartX = useRef(0)
   const touchEndX = useRef(0)
   const params = useParams()
-  const propertyId = params.id
+  const propertyId = params.id as string
 
   useEffect(() => {
     const fetchPropertyData = async () => {
       try {
         setIsLoading(true)
-        const propertyRef = doc(db, 'properties', propertyId)
+        const propertyRef: DocumentReference = doc(db, 'properties', propertyId)
         const propertySnap = await getDoc(propertyRef)
         
         if (propertySnap.exists()) {
