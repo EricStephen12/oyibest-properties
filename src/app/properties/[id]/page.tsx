@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaBed, FaBath, FaRulerCombined, FaPhone, FaWhatsapp, FaTimes, FaChevronLeft, FaChevronRight, FaCalendarAlt } from 'react-icons/fa'
 import { useParams } from 'next/navigation'
-import { doc, getDoc, type DocumentData, type DocumentReference } from 'firebase/firestore'
+import { doc, getDoc, type DocumentData, type DocumentReference, Timestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase/config'
 
 interface Property extends DocumentData {
@@ -43,13 +43,13 @@ export default function PropertyDetails() {
         const propertySnap = await getDoc(propertyRef)
         
         if (propertySnap.exists()) {
-          const data = propertySnap.data()
+          const data = propertySnap.data() as Property
           console.log('Property Data:', data)
           setProperty({
             ...data,
-            createdAt: data.createdAt?.toDate(),
-            updatedAt: data.updatedAt?.toDate()
-          })
+            createdAt: data.createdAt instanceof Timestamp ? data.createdAt.toDate() : data.createdAt,
+            updatedAt: data.updatedAt instanceof Timestamp ? data.updatedAt.toDate() : data.updatedAt
+          } as Property)
         } else {
           setError('Property not found')
         }
